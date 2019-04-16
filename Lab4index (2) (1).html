@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Lab 04 Starter Template</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: whitesmoke;
+            font-family: Lato, sans-serif;
+            color: #0D0000;
+        }
+        header {
+            padding: 6px 10%;
+        }
+        h1 {
+            display: inline-block;
+            margin-right: 20px;
+            color: #001323;
+        }
+        h2 {
+            display: inline-block;
+            color: #001323;
+        }
+        #map {
+            width: 80%;
+            height: 540px;
+            margin: 10px auto;
+        }
+        footer {
+            padding: 6px 10%;
+            width: 80%;
+        }
+        p {
+            font-size: 1em;
+            color: #001323;
+        }
+        button {
+            font-size: 1.2em;
+            margin-left: 10%;
+        }
+        /* Additional style rules go here! */
+        
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Fur Central</h1>
+        <br>
+        <h2>Historical Outposts at the Northern Border</h2>
+    </header>
+
+    <div id='map'></div>
+    <button id='map-cities'>Map Cities</button>
+    <footer>
+        <p>Map authored by Lex V</p>
+        <br>
+        <p>Spatial data pulled from google. Code sourced from class and w3 schools.</p>
+        <br>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna magna, maximus nec laoreet sit amet, dictum ultricies nibh. Ut id auctor lacus. Nam a dolor et justo luctus luctus. Duis a elit eget risus dictum vehicula id eu elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed sed enim nisl.
+        </p>
+    </footer>
+
+<script>
+    
+    // map options
+    var options = {
+        center: [42.0987,-75.9180],
+        zoom: 6
+    }
+    
+    // creates the Leaflet map
+    var map = L.map('map', options);
+    
+    // requests some map tiles
+    var tiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    });
+    
+    // adds these tiles to the map
+    map.addLayer(tiles);
+    //task 1
+  var cities = ["Toronto", "Buffalo", "Kingston"];
+ 
+  var cityCoords = [
+      [43.6532, -79.3832],
+      [42.8864, -78.8784],
+      [41.9270, -73.9974]
+      ];
+
+    var cityPops = [
+        2732000,
+        258612,
+        23169
+        ];
+    
+        
+    var cityAreas = [
+        243.3,
+        52.51,
+        8.77
+        ];
+    
+        
+    var button = document.getElementById("map-cities");
+    
+      button.addEventListener("click", function() {
+        
+        do {
+            var units = prompt('Enter the units for calculating density', 'Enter "miles" or "km"');
+        } while (units != "miles" && units != "km");
+        
+        // According to W3 schools, a do function executes a loop, which continues to run if the proper conditions are met. In this instance, this loop will keep prompting the user until the user enters a valid type of units they want to use, either miles or km. 
+        
+        // Task #2 Below
+        
+        mapCities(units);
+          
+    }); // addEventListener callback function ends here
+    
+    
+    // task 4 write a function signature here named mapCities so that it accepts var units as a parameter
+    
+    function mapCities(units) {
+        for(var i=0; i<cities.length; i++){
+                var density = calcPopDensity(cityPops[i],cityAreas[i],units);
+            console.log(density);
+             var popup = "<b>" + cities[i] + "</b><br>" +
+               "<b>Density</b>: "+density.toLocaleString()+" people per sq " + units;
+            L.marker(cityCoords[i])
+               .addTo(map)
+               .bindPopup(popup);
+    
+        }
+    }
+    
+    function calcPopDensity(cityPop, cityArea, units ){
+        var density;
+        if(units == "miles"){
+            density = cityPop/cityArea;
+        }else if(units == "km"){
+            density = cityPop/(cityArea*2.589)
+        }else{
+            console.log("Not a valid unit");
+        }
+        return density;
+    }
+    //Write a For Loop
+    
+    //Inside the code executed after the for loop is completed call a function called calcPopDensity that sends three arguments, cityPop, cityArea, and Units - the population, area, and units for each city
+    
+    //Assign the function call above a variable named density
+    //Enter the code below to accomplish task #7
+    
+  
+// end the for loop
+//end the mapcities function
+    
+// task 5 write/declare a function named calcPopDensity here so that it accepts a single city's
+// population, area, and the value for units determined by the user
+
+//write a series conditional statement that will bring back the proper density depending on what the user enters in the prompt. Send what you produced back to the caller by using return. You will use that this information returned to the caller in the popup!
+    
+    
+    
+</script>
+    
+</body>
+
+</html>
